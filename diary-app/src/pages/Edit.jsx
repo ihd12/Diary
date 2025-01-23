@@ -3,7 +3,7 @@ import Button from '../component/Button';
 import Editor from '../component/Editor';
 import Header from '../component/Header';
 import useDiary from '../hooks/useDiary';
-import { DiaryDispacthContext } from '../App';
+import { DiaryDispacthContext } from '../Test';
 import { useContext, useEffect } from 'react';
 import { setPageTitle } from '../util';
 

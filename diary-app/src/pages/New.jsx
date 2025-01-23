@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../component/Header";
 import Button from "../component/Button";
 import Editor from "../component/Editor";
-import {DiaryDispacthContext} from "../App"
+import {DiaryDispacthContext} from "../Test"
 import { useContext, useEffect } from "react";
 import { setPageTitle } from "../util";
 
