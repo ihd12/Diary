@@ -5,9 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { getMonthRangeByDate, setPageTitle } from "../util";
 import DiaryList from "../component/DiaryList";
 
-const Home = () =>{
+const Home = ({handleLogout}) =>{
   const data = useContext(DiaryStateContext);
-  console.log(data);
   const [pivotDate, setPivotDate] = useState(new Date());
   const [filteredData, setFilteredData] = useState([]);
   const headerTitle = `${pivotDate.getFullYear()}년 ${pivotDate.getMonth()+1}월`;
@@ -19,8 +18,7 @@ const Home = () =>{
         data.filter(
           (it) => {
             const date =  new Date(it.date).getTime();
-            console.log(it.date)
-            return beginTimeStamp <= date && date <= endTimeStamp 
+            return beginTimeStamp <= date && date <= endTimeStamp;
           }
         )
         );
@@ -36,6 +34,10 @@ const Home = () =>{
   const onDecreaseMonth = () => {
     setPivotDate(new Date(pivotDate.getFullYear(), pivotDate.getMonth() - 1));
   }
+  const logoutStyle = {
+    display : "flex",
+    justifyContent:"center"
+  }
   return (
   <div>
     <Header 
@@ -48,6 +50,9 @@ const Home = () =>{
         onClick={onIncreaseMonth} />}
     />
     <DiaryList data={filteredData} />
+    <div style={logoutStyle}>
+      <Button text={"로그아웃"} onClick={handleLogout} />
+    </div>
   </div>
 );
 }

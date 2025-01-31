@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,11 +15,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zerock.diaryapi.security.APIUserDetailsService;
+import org.zerock.diaryapi.security.filter.APILoginFilter;
+import org.zerock.diaryapi.security.filter.RefreshTokenFilter;
 import org.zerock.diaryapi.security.filter.TokenCheckFilter;
+import org.zerock.diaryapi.security.handler.APILoginSuccessHandler;
 import org.zerock.diaryapi.util.JWTUtil;
 
 import java.util.Arrays;
@@ -47,36 +53,36 @@ public class CustomSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain (final HttpSecurity http) throws Exception {
     log.info("---------------configure-----------------------");
-    // 인증 관리자 생성위한 빌더 생성
-//    AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//    //인증 관리자 빌더를 사용하여 userDetailsSevice 설정과 passwordEncoder 설정
-//    authenticationManagerBuilder
-//        .userDetailsService(apiUserDetailsService)
-//            .passwordEncoder(passwordEncoder());
-//    // 인증관리자 빌더를 통해 인증관리자를 생성
-//    AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-//    //http에 인증관리자 설정
-//    http.authenticationManager(authenticationManager);
-//
-//    // APILoginFilter 를 불러올때 사용할 URL 설정
-//    APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
-//    //APILoginFilter가 위에서 만든 인증 관리자를 사용할지 설정
-//    apiLoginFilter.setAuthenticationManager(authenticationManager);
-//
-//    //APILoginSuccessHandler 선언
-//    APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
-//    //SuccessHandler 세팅
-//    apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
-//
-//    // APILoginFilter 전에 실행할 필터를 설정
-//    http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//    http.addFilterBefore(
-//        tokenCheckFilter(jwtUtil, apiUserDetailsService),
-//        UsernamePasswordAuthenticationFilter.class
-//    );
-//    //TokenCheckFilter실행되기 전 RefreshTokenFilter가 실행됨
-//    http.addFilterBefore(new RefreshTokenFilter("/refreshToken",jwtUtil), TokenCheckFilter.class);
+//     인증 관리자 생성위한 빌더 생성
+    AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+    //인증 관리자 빌더를 사용하여 userDetailsSevice 설정과 passwordEncoder 설정
+    authenticationManagerBuilder
+        .userDetailsService(apiUserDetailsService)
+            .passwordEncoder(passwordEncoder());
+    // 인증관리자 빌더를 통해 인증관리자를 생성
+    AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+    //http에 인증관리자 설정
+    http.authenticationManager(authenticationManager);
+
+    // APILoginFilter 를 불러올때 사용할 URL 설정
+    APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
+    //APILoginFilter가 위에서 만든 인증 관리자를 사용할지 설정
+    apiLoginFilter.setAuthenticationManager(authenticationManager);
+
+    //APILoginSuccessHandler 선언
+    APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
+    //SuccessHandler 세팅
+    apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+    // APILoginFilter 전에 실행할 필터를 설정
+    http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+    http.addFilterBefore(
+        tokenCheckFilter(jwtUtil, apiUserDetailsService),
+        UsernamePasswordAuthenticationFilter.class
+    );
+    //TokenCheckFilter실행되기 전 RefreshTokenFilter가 실행됨
+    http.addFilterBefore(new RefreshTokenFilter("/refreshToken",jwtUtil), TokenCheckFilter.class);
 
     //csrf 설정 끄기
     http.csrf().disable();

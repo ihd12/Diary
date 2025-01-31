@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { DiaryStateContext } from "../App";
+import { DiaryStateContext } from "../Test";
 import {useNavigate} from "react-router-dom";
 // 파라미터의 아이디를 이용하여 일치하는
 // 일기 데이터를 반환하는 커스텀 훅

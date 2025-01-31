@@ -24,7 +24,7 @@ const Diary = () =>{
   }else{
     const {date, emotionId, content} = data;
     const title = 
-      `${getFormattedDate(new Date(Number(date)))} 기록`;
+      `${getFormattedDate(new Date(date))} 기록`;
     return(
       <div>
         <Header 

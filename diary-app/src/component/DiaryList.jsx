@@ -17,9 +17,9 @@ const DiaryList = ({data}) =>{
   useEffect(()=>{
     const compare = (a,b) =>{
       if(sortType === "latest"){
-        return Number(b.date) - Number(a.date);
+        return Number(new Date(b.date)) - Number(new Date(a.date));
       }else{
-        return Number(a.date) - Number(b.date);
+        return Number(new Date(a.date)) - Number(new Date(b.date));
       }
     }
     // 데이터를 JSON형식으로 변경

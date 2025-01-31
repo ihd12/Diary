@@ -24,7 +24,7 @@ const Editor = ({initData, onSubmit}) =>{
     if(initData){
       setState({
         ...initData,
-        date:getFormattedDate(new Date(parseInt(initData.date))),
+        date:getFormattedDate(new Date(initData.date)),
       });
     }
   },[initData]);
